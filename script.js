@@ -1,7 +1,12 @@
-const OPTIONS = ['rock', 'paper', 'scissors'];
-
 function getComputerChoice() {
-    let choice = Math.floor(Math.random() * 3);
+    let randomNumber = Math.floor(Math.random() * 3);
 
-    return OPTIONS[choice];
+    switch(randomNumber) {
+        case 0:
+            return 'rock';
+        case 1:
+            return 'paper';
+        default:
+            return 'scissors';
+    }
 }
