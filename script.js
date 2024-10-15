@@ -1,3 +1,14 @@
+const GAME_ROUNDS = 5;
+
+let humanScore = computerScore = roundsPlayed = 0;
+
+const roundDisplay = document.querySelector('.round');
+const humanScoreDisplay = document.querySelector('.score-human');
+const computerScoreDisplay = document.querySelector('.score-computer');
+const messageDisplay = document.querySelector('.message');
+const buttonsContainer = document.querySelector('.buttons');
+const buttons = document.querySelectorAll('.buttons > button');
+
 function getComputerChoice() {
     let randomNumber = Math.floor(Math.random() * 3);
 
@@ -17,61 +28,59 @@ function capitalizeWord(word) {
     return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
-function playRound(humanChoice) {
-    const computerChoice = getComputerChoice();
+function changeBoxColor(element, color = null) {
+    element.classList.remove('red', 'green', 'blue');
 
-    const scoreDisplay = document.querySelector('.score-display');
-    const roundMessageDisplay = document.querySelector('.message-display');
+    if (color === 'red' || color === 'green' || color === 'blue') {
+        element.classList.add(color);
+    }
+}
 
+function playRound(humanChoice, computerChoice) {
     if (humanChoice === computerChoice) {
-        roundMessageDisplay.innerText = `Tie! Both players picked ${capitalizeWord(humanChoice)}.`;
+        messageDisplay.innerText = `Tie! Both players picked ${capitalizeWord(humanChoice)}.`;
+        changeBoxColor(messageDisplay, 'blue');
     } else if ((humanChoice === 'rock' && computerChoice === 'scissors') ||
                (humanChoice === 'paper' && computerChoice === 'rock') ||
                (humanChoice === 'scissors' && computerChoice === 'paper'))
     {
-        humanScore++;
-        roundMessageDisplay.innerText = `You win! ${capitalizeWord(humanChoice)} beats ${capitalizeWord(computerChoice)}.`;
+        humanScoreDisplay.innerText = `Human: ${++humanScore}`;
+        messageDisplay.innerText = `You win! ${capitalizeWord(humanChoice)} beats ${capitalizeWord(computerChoice)}`;
+        changeBoxColor(messageDisplay, 'green');
     } else {
-        computerScore++;
-        roundMessageDisplay.innerText = `You lose! ${capitalizeWord(computerChoice)} beats ${capitalizeWord(humanChoice)}.`;
+        computerScoreDisplay.innerText = `Computer: ${++computerScore}`;
+        messageDisplay.innerText = `You lose! ${capitalizeWord(computerChoice)} beats ${capitalizeWord(humanChoice)}`;
+        changeBoxColor(messageDisplay, 'red');
     }
 
-    scoreDisplay.innerText = `Human: ${humanScore} | Computer: ${computerScore}`;
-
-    roundsPlayed++;
-
-    if (roundsPlayed >= 5) {
-        decideWinner();
+    if (++roundsPlayed < GAME_ROUNDS) {
+        roundDisplay.innerText = `Round ${roundsPlayed + 1}/${GAME_ROUNDS}`;
+    } else {
+        endGame();
     }
 }
 
-function decideWinner() {
-    const winnerDisplay = document.querySelector('.winner-display');
-    const buttons = document.querySelectorAll('button');
-    
+function endGame() {
     if (humanScore === computerScore) {
-        winnerDisplay.innerText = 'Tie!';
+        roundDisplay.innerText = 'Tie!';
+        changeBoxColor(roundDisplay, 'blue');
     } else if (humanScore < computerScore) {
-        winnerDisplay.innerText = 'You lose!';
+        roundDisplay.innerText = 'You lose!';
+        changeBoxColor(roundDisplay, 'red');
     } else {
-        winnerDisplay.innerText = 'You win!';
+        roundDisplay.innerText = 'You win!';
+        changeBoxColor(roundDisplay, 'green');
     }
 
     buttons.forEach((button) => {
         button.disabled = true;
-    });
+        changeBoxColor(button);
+    })
 }
 
-let humanScore = computerScore = roundsPlayed = 0;
+buttonsContainer.addEventListener('click', (event) => {
+    const humanChoice = event.target.id;
+    const computerChoice = getComputerChoice();
 
-document.querySelector('.button-rock').addEventListener('click', () => {
-    playRound('rock');
-});
-
-document.querySelector('.button-paper').addEventListener('click', () => {
-    playRound('paper');
-});
-
-document.querySelector('.button-scissors').addEventListener('click', () => {
-    playRound('scissors');
+    playRound(humanChoice, computerChoice);
 });
