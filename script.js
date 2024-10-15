@@ -6,7 +6,6 @@ const roundDisplay = document.querySelector('.round');
 const humanScoreDisplay = document.querySelector('.score-human');
 const computerScoreDisplay = document.querySelector('.score-computer');
 const messageDisplay = document.querySelector('.message');
-const buttonsContainer = document.querySelector('.buttons');
 const buttons = document.querySelectorAll('.buttons > button');
 
 function getComputerChoice() {
@@ -78,9 +77,11 @@ function endGame() {
     })
 }
 
-buttonsContainer.addEventListener('click', (event) => {
-    const humanChoice = event.target.id;
-    const computerChoice = getComputerChoice();
+buttons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+        const humanChoice = event.target.id;
+        const computerChoice = getComputerChoice();
 
-    playRound(humanChoice, computerChoice);
+        playRound(humanChoice, computerChoice);
+    })
 });
