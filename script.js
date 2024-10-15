@@ -18,20 +18,25 @@ function capitalizeWord(word) {
 }
 
 function playRound(humanChoice) {
-    let computerChoice = getComputerChoice();
+    const computerChoice = getComputerChoice();
+
+    const scoreDisplay = document.querySelector('.score-display');
+    const roundMessageDisplay = document.querySelector('.round-message-display');
 
     if (humanChoice === computerChoice) {
-        console.log(`Tie! Both players picked ${capitalizeWord(humanChoice)}.`);
+        roundMessageDisplay.innerText = `Tie! Both players picked ${capitalizeWord(humanChoice)}.`;
     } else if ((humanChoice === 'rock' && computerChoice === 'scissors') ||
                (humanChoice === 'paper' && computerChoice === 'rock') ||
                (humanChoice === 'scissors' && computerChoice === 'paper'))
     {
         humanScore++;
-        console.log(`You win! ${capitalizeWord(humanChoice)} beats ${capitalizeWord(computerChoice)}.`);
+        roundMessageDisplay.innerText = `You win! ${capitalizeWord(humanChoice)} beats ${capitalizeWord(computerChoice)}.`;
     } else {
         computerScore++;
-        console.log(`You lose! ${capitalizeWord(computerChoice)} beats ${capitalizeWord(humanChoice)}.`);
+        roundMessageDisplay.innerText = `You lose! ${capitalizeWord(computerChoice)} beats ${capitalizeWord(humanChoice)}.`;
     }
+
+    scoreDisplay.innerText = `Human: ${humanScore} | Computer: ${computerScore}`;
 }
 
 /*function playGame() {
