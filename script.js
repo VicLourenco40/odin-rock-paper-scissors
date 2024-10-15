@@ -21,7 +21,7 @@ function playRound(humanChoice) {
     const computerChoice = getComputerChoice();
 
     const scoreDisplay = document.querySelector('.score-display');
-    const roundMessageDisplay = document.querySelector('.round-message-display');
+    const roundMessageDisplay = document.querySelector('.message-display');
 
     if (humanChoice === computerChoice) {
         roundMessageDisplay.innerText = `Tie! Both players picked ${capitalizeWord(humanChoice)}.`;
@@ -37,19 +37,32 @@ function playRound(humanChoice) {
     }
 
     scoreDisplay.innerText = `Human: ${humanScore} | Computer: ${computerScore}`;
+
+    roundsPlayed++;
+
+    if (roundsPlayed >= 5) {
+        decideWinner();
+    }
 }
 
-/*function playGame() {
+function decideWinner() {
+    const winnerDisplay = document.querySelector('.winner-display');
+    const buttons = document.querySelectorAll('button');
+    
     if (humanScore === computerScore) {
-        console.log('Tie!');
+        winnerDisplay.innerText = 'Tie!';
     } else if (humanScore < computerScore) {
-        console.log('You lose!');
+        winnerDisplay.innerText = 'You lose!';
     } else {
-        console.log('You win!');
+        winnerDisplay.innerText = 'You win!';
     }
-}*/
 
-let humanScore = computerScore = 0;
+    buttons.forEach((button) => {
+        button.disabled = true;
+    });
+}
+
+let humanScore = computerScore = roundsPlayed = 0;
 
 document.querySelector('.button-rock').addEventListener('click', () => {
     playRound('rock');
